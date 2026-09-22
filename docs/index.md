@@ -1,17 +1,19 @@
-# Welcome to MkDocs
+# 欢迎来到 Ti 的博客 👋
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+你好！欢迎来到我的个人空间。
 
-## Commands
+我是 **Ti**，一名正在学习**信息安全**的学生。这里记录了我的日常学习笔记、课程作业，以及我在技术路上踩过的坑。
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## 🔍 你可以在博客里找到什么？
+- 📝 **学习笔记**：记录网络安全、系统配置等学习心得。
+- 📚 **课程作业**：偶尔展示我的实践操作过程。
+- 🚀 **踩坑记录**：那些让我头秃又成长了的瞬间。
 
-## Project layout
+## 📬 联系我
+如果你对我的笔记有任何建议，或者想一起交流学习，随时联系我！
+- 📧 邮箱：你的邮箱@example.com
+- 🐙 GitHub：[Ti-cre](https://github.com/Tit-cre)
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+> 每天进步一点点，记录看得见的成长。
+
+祝你看得开心！😊
