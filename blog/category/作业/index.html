@@ -19,7 +19,7 @@
     
     
       
-        <title>随笔 - Ti</title>
+        <title>作业 - Ti</title>
       
     
     
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              随笔
+              作业
             
           </span>
         </div>
@@ -312,7 +312,7 @@
   <div class="md-content" data-md-component="content">
     <div class="md-content__inner">
       <header class="md-typeset">
-        <h1 id="_1">随笔</h1>
+        <h1 id="_1">作业</h1>
       </header>
       
         <article class="md-post md-post--excerpt">
@@ -321,12 +321,13 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
-          <time datetime="2026-09-20 00:00:00+00:00">2026年9月20日</time></li>
+          <time datetime="2026-09-22 00:00:00+00:00">2026年9月22日</time></li>
         
           <li class="md-meta__item">
             分类于
             
-              <a href="./" class="md-meta__link">随笔</a></li>
+              <a href="./" class="md-meta__link">作业</a>, 
+              <a href="../%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" class="md-meta__link">信息安全</a></li>
         
         
           
@@ -342,16 +343,48 @@
     </div>
   </header>
   <div class="md-post__content md-typeset">
-    <h2 id="1"><a class="toclink" href="../../2026/09/20/1/">1</a></h2>
-<p>1111</p>
-<h3 id="_1"><a class="toclink" href="../../2026/09/20/1/#_1">学功能</a></h3>
+    <h2 id="20kali"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">信息安全作业：等保2.0与Kali环境配置</a></h2>
+<h3 id="20"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#20">第一部分：我对等保2.0的理解</a></h3>
+<h4 id="1-20"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#1-20">1. 什么是等保2.0？</a></h4>
+<p>等保2.0（网络安全等级保护2.0）是我国网络安全领域的基本国策和基本制度。从PPT的“等级保护发展历程”可以看出，它历经了1994年、2006年、2009年、2016年等多个阶段的演进，最终在2019年正式实施《网络安全等级保护制度2.0》。</p>
+<h4 id="2-20"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#2-20">2. 等保2.0的核心变化</a></h4>
+<p>相比于等保1.0，等保2.0不仅扩大了保护对象（涵盖了云计算、物联网、移动互联、工业控制系统等），还提升了法律层级。PPT中提到的“在违法的边缘试探”这个梗图也说明了：<strong>合规是底线，不能触碰法律红线</strong>。</p>
+<h4 id="3"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#3">3. 关于等保评估中的“社会工程学”与“拒绝服务攻击”</a></h4>
+<p>在实际的等保测评中，系统不仅要防范技术漏洞，还要防范<strong>社会工程学攻击</strong>（如钓鱼邮件、欺骗诱导），同时也要具备应对<strong>拒绝服务攻击（DDoS）</strong>的防护能力。</p>
+<hr />
+<h3 id="kali"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#kali">第二部分：虚拟机安装与Kali配置</a></h3>
+<h4 id="1"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#1">1. 环境准备</a></h4>
 <ul>
-<li>1<br />
-<em>2500</em><br />
-<strong>2500</strong><br />
-<a href="https://www.baidu.com/">百度一下</a>  </li>
+<li>虚拟机软件：VirtualBox</li>
+<li>Kali Linux 镜像：官网下载最新版</li>
 </ul>
-<p><a href="https://www.deepseek.com/">deepseek</a></p>
+<h4 id="2-kali"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#2-kali">2. 安装虚拟机与Kali</a></h4>
+<ol>
+<li>
+<p>下载并安装<a href="https://www.virtualbox.org/wiki/Downloads">虚拟机软件</a></p>
+</li>
+<li>
+<p>新建虚拟机，分配了 4GB 内存，2 核 CPU，50GB 硬盘，存放于 D 盘。</p>
+</li>
+<li>
+<p>加载<a href="https://mirrors.tuna.tsinghua.edu.cn/kali-images/"> Kali Linux </a>的 ISO 镜像，开始安装。</p>
+</li>
+<li>
+<p>设置用户名和密码，等待安装<img alt="安装完成" src="../../../assets/install.png" /></p>
+</li>
+</ol>
+<h4 id="3-kali"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#3-kali">3. Kali 配置</a></h4>
+<ol>
+<li>安装 VMware Tools。</li>
+<li>
+<p>更新软件源，配置国内清华源，提高下载速度
+   <img alt="更换清华源" src="../../../assets/kali_source.png" /></p>
+</li>
+<li>
+<p>执行系统更新：<code>sudo apt update &amp;&amp; sudo apt upgrade -y</code>。
+   <img alt="系统更新" src="../../../assets/kali_update.png" /></p>
+</li>
+</ol>
     
     
   </div>
