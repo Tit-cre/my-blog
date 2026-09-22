@@ -17,3 +17,11 @@ print(string_type)
 name = 666
 name_type = type(name)
 print(name_type)
+
+#输入你的姓和名，输出首字母大写的姓名
+first_name = input()
+last_name = input()
+#**********begin**********
+full_name = first_name + ' ' + last_name
+print(full_name.title())
+#**********end**********
