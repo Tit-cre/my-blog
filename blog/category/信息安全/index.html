@@ -321,6 +321,75 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
+          <time datetime="2026-10-21 00:00:00+00:00">2026年10月21日</time></li>
+        
+          <li class="md-meta__item">
+            分类于
+            
+              <a href="../%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%BD%9C%E4%B8%9A/" class="md-meta__link">被动扫描作业</a>, 
+              <a href="./" class="md-meta__link">信息安全</a></li>
+        
+        
+          
+          <li class="md-meta__item">
+            
+              需要 2 分钟阅读时间
+            
+          </li>
+        
+        
+      </ul>
+      
+    </div>
+  </header>
+  <div class="md-post__content md-typeset">
+    <h2 id="_1"><a class="toclink" href="../../2026/10/21/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%AD%90%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86/">信息安全作业：被动扫描与子域名收集</a></h2>
+<h4 id="zoomeye"><a class="toclink" href="../../2026/10/21/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%AD%90%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86/#zoomeye">第一部分：与 ZoomEye 功能类似的搜索引擎</a></h4>
+<p>ZoomEye 属于网络空间测绘引擎，它索引的不是普通的网页内容，而是互联网上暴露的 IP、端口、服务、协议 banner 和设备指纹。除了 ZoomEye，目前主流的同类平台还有：</p>
+<ul>
+<li><strong>FOFA</strong>：国内常用，支持 HTML 源码级检索，语法灵活，国内资产覆盖较全。</li>
+<li><strong>360 Quake（鹰图）</strong>：360 旗下资产测绘平台，数据更新快，语法与 ZoomEye 较为接近。</li>
+<li><strong>Shodan</strong>：最早的 IoT 与设备搜索引擎，海外设备指纹和 banner 数据较强。</li>
+<li><strong>Censys</strong>：学术背景，在 TLS 证书与主机测绘方面较突出，适合从证书维度发现资产。</li>
+<li><strong>奇安信 Hunter</strong>：国内资产覆盖率较高，适合国内政企与高校资产测绘。</li>
+</ul>
+<hr />
+<h4 id="zoomeye_1"><a class="toclink" href="../../2026/10/21/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%AD%90%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86/#zoomeye_1">第二部分：ZoomEye 搜索实操</a></h4>
+<p>在公共搜索平台<a href="https://www.zoomeye.org/`">Zoomeye</a> 登录后，输入检索语句进行资产搜索。本次实验使用基础语法进行测试。</p>
+<p><strong>检索语法</strong>：<code>app="nginx"</code> （检索使用 Nginx 服务的资产）</p>
+<p><img alt="搜索结果" src="../../../assets/zoomeye.png" /></p>
+<blockquote>
+<p><em>说明：在 ZoomEye 公共搜索页查询 <code>app="nginx"</code> 结果截图。</em></p>
+</blockquote>
+<hr />
+<h4 id="_2"><a class="toclink" href="../../2026/10/21/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%AD%90%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86/#_2">第三部分：子域名收集实操</a></h4>
+<p><strong>平台选择</strong>：<a href="https://dnsdumpster.com/">DNSDumpster</a> 是一款免费的被动 DNS 信息收集工具，能够从攻击者视角发现与目标域名关联的主机、子域名及网络拓扑。</p>
+<p><strong>实操过程</strong>：
+输入公共教育域名 <code>edu.cn</code> 进行检索。从结果可以看出，该平台成功抓取并聚合了大量数据：
+1. <strong>资产规模</strong>：共发现 <code>148,136</code> 条记录（免费版展示前 50 条）。
+2. <strong>系统分布</strong>：通过世界地图直观展示了服务器的地理分布位置。
+3. <strong>托管网络与服务</strong>：识别出主要的托管网络为 <code>CHINANET-BACKBONE</code>，并探测到了 <code>nginx</code> 和 <code>SSH</code> 等服务的 Banner 信息。</p>
+<p><img alt="搜索结果" src="../../../assets/dns1.png" /></p>
+<blockquote>
+<p><em>说明： DNSDumpster 包含世界地图、网络分布和底部红字提示的截图。</em></p>
+</blockquote>
+<p><strong>子域名列表提取</strong>：
+向下滚动页面，在 <code>A Records (subdomains from dataset)</code> 区域可以查看具体的子域名记录列表，这为后续的资产梳理和漏洞评估提供了重要的目标清单。</p>
+<p><img alt="搜索结果" src="../../../assets/dns2.png" /></p>
+<hr />
+<h4 id="_3"><a class="toclink" href="../../2026/10/21/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%A2%AB%E5%8A%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E5%AD%90%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86/#_3">第四部分：合规声明</a></h4>
+<p>本次实验仅针对 <code>edu.cn</code> 等公开测试或公共服务域名进行被动查询，未对任何目标进行主动扫描、漏洞利用或破坏性探测。所有操作均在合法合规的前提下进行，旨在学习网络安全信息收集的基本原理，遵守《网络安全法》及相关伦理规范。</p>
+    
+    
+  </div>
+</article>
+      
+        <article class="md-post md-post--excerpt">
+  <header class="md-post__header">
+    
+    <div class="md-post__meta md-meta">
+      <ul class="md-meta__list">
+        <li class="md-meta__item">
           <time datetime="2026-10-19 00:00:00+00:00">2026年10月19日</time></li>
         
           <li class="md-meta__item">
@@ -356,13 +425,13 @@
 <h4 id="_2"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_2">第二部分：实验操作与数据获取</a></h4>
 <h5 id="1-qq-ip"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#1-qq-ip">1. 确定 QQ 通信服务器 IP</a></h5>
 <p>现代网络应用（如 QQ）会与多个服务器建立连接。为了精准定位，我们以管理员身份打开 PowerShell，执行以下命令获取 QQ 进程的远程连接 IP：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
 </code></pre></div>
 <p><img alt="" src="../../../assets/power.png" /></p>
 <p><strong>现象分析</strong>：截图显示，QQ主要建立了基于 <code>443</code> 端口（HTTPS）的连接，状态多为 <code>Established</code>（已建立）。获取到的主要远程 IPv4 为 <code>36.249.91.91</code> 和 <code>157.148.48.22</code>（注：同时存在IPv6通信）。</p>
 <h5 id="2-wireshark_1"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-wireshark_1">2. Wireshark 过滤与现象观察</a></h5>
 <p>在 Wireshark 中选择 <code>WLAN</code> 网卡开始抓包，在 QQ 中向好友或文件传输助手发送文字、图片和压缩包后，停止抓包。在顶部的显示过滤器中输入获取的 IP 进行精准过滤：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ip.addr == 36.249.91.91 || ip.addr == 157.148.48.22
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ip.addr == 36.249.91.91 || ip.addr == 157.148.48.22
 </code></pre></div>
 <p><strong>现象与原理分析</strong>：
 在抓包列表中，Protocol（协议）列主要显示为 <code>TCP</code> 和 <code>TLSv1.2</code>。
