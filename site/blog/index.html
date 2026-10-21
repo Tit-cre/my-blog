@@ -337,6 +337,89 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
+          <time datetime="2026-10-19 00:00:00+00:00">2026年10月19日</time></li>
+        
+          <li class="md-meta__item">
+            分类于
+            
+              <a href="category/%E4%BD%9C%E4%B8%9A/" class="md-meta__link">作业</a>, 
+              <a href="category/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" class="md-meta__link">信息安全</a></li>
+        
+        
+          
+          <li class="md-meta__item">
+            
+              需要 3 分钟阅读时间
+            
+          </li>
+        
+        
+      </ul>
+      
+    </div>
+  </header>
+  <div class="md-post__content md-typeset">
+    <h2 id="qqpc-pcpc-"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/">信息安全作业：QQ流量分析（PC-PC端、PC-手机端）</a></h2>
+<h4 id="_1"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_1">第一部分：实验原理与网络基础</a></h4>
+<h5 id="1"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#1">1. 网络通信基础参数</a></h5>
+<p>实现上网，通常需要网关（Gateway）、子网掩码、IP地址等核心参数。子网间的通信必须依赖路由器（网关）。如果没有路由器，各个子网将是孤立无法通信的。在Windows系统中，我们通常使用 <code>ipconfig /all</code> 查看网络配置，使用 <code>netstat -an</code> 查看当前网络连接状态。</p>
+<h5 id="2-wireshark"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-wireshark">2. Wireshark 应用初步</a></h5>
+<p>Wireshark 是一款强大的网络协议分析工具。本实验将利用其以下核心功能：
+- <strong>捕获报文</strong>：选择指定的网卡（如 WLAN）捕获流经该网卡的所有数据包。
+- <strong>筛选 IP 与协议</strong>：利用过滤器（如 <code>ip.addr == x.x.x.x</code>）从海量背景流量中精准定位目标应用（QQ）的流量。
+- <strong>搜索与追踪</strong>：通过正则表达式、字符串或十六进制特征码进行搜索，以及追踪完整的 TCP 流来查看应用层载荷，验证加密状态。</p>
+<hr />
+<h4 id="_2"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_2">第二部分：实验操作与数据获取</a></h4>
+<h5 id="1-qq-ip"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#1-qq-ip">1. 确定 QQ 通信服务器 IP</a></h5>
+<p>现代网络应用（如 QQ）会与多个服务器建立连接。为了精准定位，我们以管理员身份打开 PowerShell，执行以下命令获取 QQ 进程的远程连接 IP：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
+</code></pre></div>
+<p><img alt="" src="../assets/power.png" /></p>
+<p><strong>现象分析</strong>：截图显示，QQ主要建立了基于 <code>443</code> 端口（HTTPS）的连接，状态多为 <code>Established</code>（已建立）。获取到的主要远程 IPv4 为 <code>36.249.91.91</code> 和 <code>157.148.48.22</code>（注：同时存在IPv6通信）。</p>
+<h5 id="2-wireshark_1"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-wireshark_1">2. Wireshark 过滤与现象观察</a></h5>
+<p>在 Wireshark 中选择 <code>WLAN</code> 网卡开始抓包，在 QQ 中向好友或文件传输助手发送文字、图片和压缩包后，停止抓包。在顶部的显示过滤器中输入获取的 IP 进行精准过滤：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ip.addr == 36.249.91.91 || ip.addr == 157.148.48.22
+</code></pre></div>
+<p><strong>现象与原理分析</strong>：
+在抓包列表中，Protocol（协议）列主要显示为 <code>TCP</code> 和 <code>TLSv1.2</code>。
+<em>注：在抓包过程中，出现了许多红底或黑底的数据包，提示如 <code>[TCP Previous segment not captured]</code>（之前的报文段未捕获）或 <code>[TCP Out-Of-Order]</code>（TCP 乱序）。这是因为无线网络（WLAN）存在信号波动，抓包网卡漏掉了部分数据包导致的。但这不影响我们分析整体的协议架构和应用层加密状态。</em></p>
+<hr />
+<h4 id="_3"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_3">第三部分：核心问题分析</a></h4>
+<h5 id="1-qq-udp-tcp"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#1-qq-udp-tcp">1. QQ 通信使用的是 UDP 还是 TCP？</a></h5>
+<p><strong>答：使用的是 TCP 协议。</strong>
+<strong>深度分析</strong>：
+从抓包列表的 Protocol 列直观可见，当前 QQ 流量绝大部分基于 <code>TCP</code>。结合端口信息，通信主要建立在 <code>443</code> 端口。老版本的 QQ（OICQ 协议）曾大量使用 UDP 协议（如 8000 端口）以提高传输速度，但新版 QQ（NTQQ）为了保证消息的可靠送达、文件传输的完整性，全面转向了基于 TCP 的传输架构。TCP 的面向连接、可靠传输特性，更符合现代即时通讯的需求。</p>
+<h5 id="2-qq"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-qq">2. QQ 通信是加密还是明文？</a></h5>
+<p><strong>答：全程加密（基于 TLS 加密）。</strong>
+<strong>深度分析</strong>：
+在 Wireshark 中选中任意 QQ 相关的 TCP 数据包，右键选择 <strong>追踪 (Follow) -&gt; TCP 流 (TCP Stream)</strong>。
+在追踪流弹出的窗口中，我们可以观察到两个关键现象：
+1. 在协议识别上，Wireshark 将其识别为 <code>TLSv1.2</code> 甚至 <code>TLSv1.3</code> 的握手过程（如 Client Hello 阶段可见 <code>SNI=tpstelemetry.tencent...</code> 等腾讯域名）。
+2. 在数据内容上，应用层数据（Application Data）全部呈现为红蓝相间的<strong>乱码</strong>。</p>
+<p>这证明 QQ 采用了严格的 TLS 加密机制，通信内容（包括文字、图片、文件）在发送前已被加密算法处理，即使抓到了底层的包，没有密钥也无法查看任何明文内容。</p>
+<p><img alt="" src="../assets/tpc.png" />
+<img alt="" src="../assets/tpc2.png" /></p>
+<h5 id="3"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#3">3. 恢复可能为明文传输的文件</a></h5>
+<p><strong>答：无法直接恢复明文文件。</strong>
+<strong>深度分析</strong>：
+文件通常具有独特的头部特征码（Magic Number），例如 JPG 图片的文件头为十六进制 <code>FF D8 FF</code>，ZIP 压缩包为 <code>50 4B 03 04</code>。如果在未加密的 HTTP 或 FTP 传输中，我们可以通过搜索这些特征码定位文件流并提取。</p>
+<p>我们在 Wireshark 中按下 <code>Ctrl + F</code> 调出“查找分组”窗口，将查找类型设置为 <strong>“十六进制值”</strong>，输入图片特征码 <code>ffd8ff</code> 进行查找。结果 Wireshark 底部状态栏提示 <strong>“无分组包含这些字节流”</strong>。</p>
+<p><img alt="" src="../assets/find.png" /></p>
+<p><strong>原理解释</strong>：由于 QQ 文件传输同样被包裹在 TLS 加密通道内，原本文件头部的 <code>FF D8 FF</code> 在加密后变成了完全随机的字节。因此，在加密流量中直接搜索明文特征码是无效的，无法通过此方法抓取还原出文件。</p>
+<hr />
+<h4 id="_4"><a class="toclink" href="2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_4">第四部分：实验总结</a></h4>
+<p>通过本次实验，我不仅掌握了 Wireshark 的基础抓包、条件过滤、流追踪等操作，还学会了结合 PowerShell 提取应用底层网络连接信息的方法。更重要的是，通过实际抓包和分析，直观地验证了现代即时通讯软件的安全机制：全面采用 TCP 协议保障可靠性，并全程使用 TLS 协议加密数据。这有效防范了中间人攻击和流量嗅探，保护了用户的隐私安全。</p>
+    
+    
+  </div>
+</article>
+      
+        <article class="md-post md-post--excerpt">
+  <header class="md-post__header">
+    
+    <div class="md-post__meta md-meta">
+      <ul class="md-meta__list">
+        <li class="md-meta__item">
           <time datetime="2026-09-22 00:00:00+00:00">2026年9月22日</time></li>
         
           <li class="md-meta__item">
