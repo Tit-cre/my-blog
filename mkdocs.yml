@@ -37,3 +37,4 @@ markdown_extensions:
       alternate_style: true
   - tables
   - admonition
+  - glightbox
