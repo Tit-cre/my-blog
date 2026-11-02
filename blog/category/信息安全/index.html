@@ -328,6 +328,81 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
+          <time datetime="2026-10-27 00:00:00+00:00">2026年10月27日</time></li>
+        
+          <li class="md-meta__item">
+            分类于
+            
+              <a href="../%E4%BD%9C%E4%B8%9A/" class="md-meta__link">作业</a>, 
+              <a href="./" class="md-meta__link">信息安全</a></li>
+        
+        
+          
+          <li class="md-meta__item">
+            
+              需要 2 分钟阅读时间
+            
+          </li>
+        
+        
+      </ul>
+      
+    </div>
+  </header>
+  <div class="md-post__content md-typeset">
+    <h2 id="curl"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/">信息安全作业：curl工具主动扫描实验</a></h2>
+<h3 id="curl_1"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#curl_1">第一部分：curl工具基础认识</a></h3>
+<h4 id="1-curl"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#1-curl">1. 什么是curl？</a></h4>
+<p>curl（Client URL）是一款命令行的数据传输工具，支持HTTP、HTTPS、FTP、SFTP等二十多种协议。常用于API接口调试、网络请求测试、Web服务探测，是网络安全、后端开发中很常用的基础工具。</p>
+<blockquote>
+<p>注意：PowerShell中直接输入curl是<code>Invoke-WebRequest</code>的别名，真实程序需要写<code>curl.exe</code>。</p>
+</blockquote>
+<h4 id="2"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#2">2. 实验安全说明</a></h4>
+<p>本实验仅使用公开免费测试站点 httpbin.org 进行请求测试，<strong>不对任何未授权的服务器、网站进行探测</strong>；测试数据全部使用虚构数据，不提交手机号、身份证、账号密码等隐私信息。公网IP会被目标服务器记录，截图发布博客时可按需打码origin对应的IP地址。</p>
+<h3 id="_1"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#_1">第二部分：实验环境与操作</a></h3>
+<h4 id="1"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#1">1. 环境准备</a></h4>
+<ul>
+<li>操作系统：Windows</li>
+<li>终端：PowerShell</li>
+<li>curl版本：curl 8.8.0（系统自带，无需额外安装）</li>
+</ul>
+<h4 id="2-curl"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#2-curl">2. 查看curl版本</a></h4>
+<p></p><div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+<img alt="" class="glightbox" src="../../../assets/curlexe.png">
+- 发现window中自带curl，可使用进行测试<p></p>
+<h4 id="3-get"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#3-get">3. Get请求测试</a></h4>
+<p></p><div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>curl.exe https://httpbin.org/get
+</code></pre></div>
+- 运行如下图
+<img alt="" class="glightbox" src="../../../assets/get.png"><p></p>
+<h4 id="4-post-json"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#4-post-json">4. POST JSON 请求测试</a></h4>
+<ul>
+<li>请求如下
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>curl.exe -X POST -H "Content-Type:application/json" -d '{"stu_id":"test001","name":"demo"}' https://httpbin.org/post
+</code></pre></div>
+<img alt="" class="glightbox" src="../../../assets/post.png"></li>
+</ul>
+<h4 id="5"><a class="toclink" href="../../2026/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Acurl%E5%B7%A5%E5%85%B7%E4%B8%BB%E5%8A%A8%E6%89%AB%E6%8F%8F%E5%AE%9E%E9%AA%8C/#5">5. 仅获取响应头（主动探测常用）</a></h4>
+<p></p><div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>curl.exe -I https://httpbin.org
+</code></pre></div>
+- 响应如下
+<img alt="" class="glightbox" src="../../../assets/curlh.png"><p></p>
+<p>## 第三部分：实验小结</p>
+<ul>
+<li>curl 不需要图形浏览器，在命令行就可以自由构造 HTTP 请求，灵活方便。在主动扫描场景下，可以用来探测 Web 服务返回包、验证接口连通性；同时要牢记网络安全红线：<strong>所有探测行为必须获得目标授权，禁止私自扫描他人服务器</strong>。</li>
+</ul>
+    
+    
+  </div>
+</article>
+      
+        <article class="md-post md-post--excerpt">
+  <header class="md-post__header">
+    
+    <div class="md-post__meta md-meta">
+      <ul class="md-meta__list">
+        <li class="md-meta__item">
           <time datetime="2026-10-21 00:00:00+00:00">2026年10月21日</time></li>
         
           <li class="md-meta__item">
@@ -432,13 +507,13 @@
 <h4 id="_2"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_2">第二部分：实验操作与数据获取</a></h4>
 <h5 id="1-qq-ip"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#1-qq-ip">1. 确定 QQ 通信服务器 IP</a></h5>
 <p>现代网络应用（如 QQ）会与多个服务器建立连接。为了精准定位，我们以管理员身份打开 PowerShell，执行以下命令获取 QQ 进程的远程连接 IP：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
 </code></pre></div>
 <p><img alt="" class="glightbox" src="../../../assets/power.png"></p>
 <p><strong>现象分析</strong>：截图显示，QQ主要建立了基于 <code>443</code> 端口（HTTPS）的连接，状态多为 <code>Established</code>（已建立）。获取到的主要远程 IPv4 为 <code>36.249.91.91</code> 和 <code>157.148.48.22</code>（注：同时存在IPv6通信）。</p>
 <h5 id="2-wireshark_1"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-wireshark_1">2. Wireshark 过滤与现象观察</a></h5>
 <p>在 Wireshark 中选择 <code>WLAN</code> 网卡开始抓包，在 QQ 中向好友或文件传输助手发送文字、图片和压缩包后，停止抓包。在顶部的显示过滤器中输入获取的 IP 进行精准过滤：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ip.addr == 36.249.91.91 || ip.addr == 157.148.48.22
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ip.addr == 36.249.91.91 || ip.addr == 157.148.48.22
 </code></pre></div>
 <p><strong>现象与原理分析</strong>：
 在抓包列表中，Protocol（协议）列主要显示为 <code>TCP</code> 和 <code>TLSv1.2</code>。
