@@ -365,7 +365,7 @@
 <p>现代网络应用（如 QQ）会与多个服务器建立连接。为了精准定位，我们以管理员身份打开 PowerShell，执行以下命令获取 QQ 进程的远程连接 IP：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">Get-NetTCPConnection</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-in</span> <span class="p">(</span><span class="nb">Get-Process</span> <span class="n">QQ</span><span class="p">,</span> <span class="n">QQEX</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">Id</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span>
 </code></pre></div>
-<p><img alt="" src="../../../assets/power.png"></p>
+<p><img alt="" class="glightbox" src="../../../assets/power.png"></p>
 <p><strong>现象分析</strong>：截图显示，QQ主要建立了基于 <code>443</code> 端口（HTTPS）的连接，状态多为 <code>Established</code>（已建立）。获取到的主要远程 IPv4 为 <code>36.249.91.91</code> 和 <code>157.148.48.22</code>（注：同时存在IPv6通信）。</p>
 <h5 id="2-wireshark_1"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#2-wireshark_1">2. Wireshark 过滤与现象观察</a></h5>
 <p>在 Wireshark 中选择 <code>WLAN</code> 网卡开始抓包，在 QQ 中向好友或文件传输助手发送文字、图片和压缩包后，停止抓包。在顶部的显示过滤器中输入获取的 IP 进行精准过滤：</p>
@@ -388,14 +388,14 @@
 1. 在协议识别上，Wireshark 将其识别为 <code>TLSv1.2</code> 甚至 <code>TLSv1.3</code> 的握手过程（如 Client Hello 阶段可见 <code>SNI=tpstelemetry.tencent...</code> 等腾讯域名）。
 2. 在数据内容上，应用层数据（Application Data）全部呈现为红蓝相间的<strong>乱码</strong>。</p>
 <p>这证明 QQ 采用了严格的 TLS 加密机制，通信内容（包括文字、图片、文件）在发送前已被加密算法处理，即使抓到了底层的包，没有密钥也无法查看任何明文内容。</p>
-<p><img alt="" src="../../../assets/tpc.png">
-<img alt="" src="../../../assets/tpc2.png"></p>
+<p><img alt="" class="glightbox" src="../../../assets/tpc.png">
+<img alt="" class="glightbox" src="../../../assets/tpc2.png"></p>
 <h5 id="3"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#3">3. 恢复可能为明文传输的文件</a></h5>
 <p><strong>答：无法直接恢复明文文件。</strong>
 <strong>深度分析</strong>：
 文件通常具有独特的头部特征码（Magic Number），例如 JPG 图片的文件头为十六进制 <code>FF D8 FF</code>，ZIP 压缩包为 <code>50 4B 03 04</code>。如果在未加密的 HTTP 或 FTP 传输中，我们可以通过搜索这些特征码定位文件流并提取。</p>
 <p>我们在 Wireshark 中按下 <code>Ctrl + F</code> 调出“查找分组”窗口，将查找类型设置为 <strong>“十六进制值”</strong>，输入图片特征码 <code>ffd8ff</code> 进行查找。结果 Wireshark 底部状态栏提示 <strong>“无分组包含这些字节流”</strong>。</p>
-<p><img alt="" src="../../../assets/find.png"></p>
+<p><img alt="" class="glightbox" src="../../../assets/find.png"></p>
 <p><strong>原理解释</strong>：由于 QQ 文件传输同样被包裹在 TLS 加密通道内，原本文件头部的 <code>FF D8 FF</code> 在加密后变成了完全随机的字节。因此，在加密流量中直接搜索明文特征码是无效的，无法通过此方法抓取还原出文件。</p>
 <hr>
 <h4 id="_4"><a class="toclink" href="../../2026/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9Aqq%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90pc-pc%E7%AB%AFpc-%E6%89%8B%E6%9C%BA%E7%AB%AF/#_4">第四部分：实验总结</a></h4>
@@ -460,7 +460,7 @@
 <p>加载<a href="https://mirrors.tuna.tsinghua.edu.cn/kali-images/"> Kali Linux </a>的 ISO 镜像，开始安装。</p>
 </li>
 <li>
-<p>设置用户名和密码，等待安装<img alt="安装完成" src="../../../assets/install.png"></p>
+<p>设置用户名和密码，等待安装<img alt="安装完成" class="glightbox" src="../../../assets/install.png"></p>
 </li>
 </ol>
 <h4 id="3-kali"><a class="toclink" href="../../2026/09/22/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E7%AD%89%E4%BF%9D20%E4%B8%8Ekali%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#3-kali">3. Kali 配置</a></h4>
@@ -468,11 +468,11 @@
 <li>安装 VMware Tools。</li>
 <li>
 <p>更新软件源，配置国内清华源，提高下载速度
-   <img alt="更换清华源" src="../../../assets/kali_source.png"></p>
+   <img alt="更换清华源" class="glightbox" src="../../../assets/kali_source.png"></p>
 </li>
 <li>
 <p>执行系统更新：<code>sudo apt update &amp;&amp; sudo apt upgrade -y</code>。
-   <img alt="系统更新" src="../../../assets/kali_update.png"></p>
+   <img alt="系统更新" class="glightbox" src="../../../assets/kali_update.png"></p>
 </li>
 </ol>
     
